@@ -1,0 +1,19 @@
+mat-card {
+  margin: auto;
+  margin-top: 1rem;
+  width: 80%;
+}
+
+button {
+  margin-top: 1rem;
+  margin: 1%;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+div {
+  padding: 5px;
+  display: block;
+}

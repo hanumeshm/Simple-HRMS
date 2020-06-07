@@ -1,0 +1,10 @@
+<mat-toolbar color="primary">
+  <span><a routerLink="/home">Simple-HRMS</a></span>
+  <span class="spacer"></span>
+  <ul>
+    <li>
+      <a mat-button routerLink="/home" routerLinkActive="mat-accent">Home</a>
+      <a mat-button routerLinkActive="mat-accent" (click)="logout()">Logout</a>
+    </li>
+  </ul>
+</mat-toolbar>

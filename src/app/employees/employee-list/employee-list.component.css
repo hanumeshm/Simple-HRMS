@@ -1,0 +1,24 @@
+div {
+  display: block;
+  width: 90%;
+  margin: auto;
+  margin-top: 1rem;
+}
+table {
+  margin-top: 1rem;
+}
+/*.info-text {
+  text-align: center;
+} */
+
+mat-spinner {
+  margin: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.w-150 {
+  width: 222px;
+}
