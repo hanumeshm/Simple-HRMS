@@ -3,6 +3,7 @@ import { Employee } from '../employee.model';
 import { NgForm } from '@angular/forms';
 import { EmployeesService } from '../employees.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { State } from 'src/app/store/state.enum';
 
 @Component({
   selector: 'app-employee-view',
@@ -20,9 +21,8 @@ export class EmployeeViewComponent implements OnInit {
   type = 'PieChart';
   data = null;
   options = {};
-  width = 650;
+  width = 600;
   height = 400;
-  is3D = true;
 
   constructor(
     public employeeService: EmployeesService,
@@ -55,47 +55,12 @@ export class EmployeeViewComponent implements OnInit {
   }
 
   calculate(salary: number, deduction: number, stax: string) {
-    let stateTaxPercentage = 0;
-    switch (stax) {
-      case 'California': {
-        stateTaxPercentage = 13;
-        break;
-      }
-      case 'NY': {
-        stateTaxPercentage = 12;
-        break;
-      }
-      case 'Florida': {
-        stateTaxPercentage = 0;
-        break;
-      }
-      default: {
-        stateTaxPercentage = 0;
-        break;
-      }
-    }
-
+    let stateTaxPercentage = State[stax];
     this.stateTax = (salary - deduction) * (stateTaxPercentage / 100);
 
-    let federTaxPercentage = 0;
-    switch (true) {
-      case salary < 9700: {
-        federTaxPercentage = 10;
-        break;
-      }
-      case salary < 39475: {
-        federTaxPercentage = 12;
-        break;
-      }
-      case salary < 84200: {
-        federTaxPercentage = 22;
-        break;
-      }
-      case salary > 84200: {
-        federTaxPercentage = 24;
-        break;
-      }
-    }
+    let federTaxPercentage = this.employeeService.getFederalTaxPercentage(
+      salary
+    );
     this.federalTax = (salary - deduction) * (federTaxPercentage / 100);
 
     let takeHome = salary - deduction - (this.federalTax + this.stateTax);
@@ -103,7 +68,7 @@ export class EmployeeViewComponent implements OnInit {
   }
 
   action(option: string) {
-    if (option == 'list') this.router.navigate(['/home']);
+    if (option == 'list') this.router.navigate(['/list']);
     else this.router.navigate(['/edit/' + this.employeeId]);
   }
 }

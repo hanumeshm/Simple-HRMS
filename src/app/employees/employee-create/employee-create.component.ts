@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from '../employee.model';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeesService } from '../employees.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { State } from 'src/app/store/state.enum';
 
 @Component({
   selector: 'app-employee-create',
@@ -15,6 +16,9 @@ export class EmployeeCreateComponent implements OnInit {
   employee: Employee;
   isLoading = false;
   totalTakeHome = 0;
+  maxDate: Date = new Date();
+  isLinear = false;
+
   constructor(
     public employeeService: EmployeesService,
     public route: ActivatedRoute,
@@ -71,46 +75,8 @@ export class EmployeeCreateComponent implements OnInit {
   calculate(form: NgForm) {
     let salary = form.value.salary;
     let deduction = form.value.deduction;
-
-    let stateTax = 0;
-    switch (form.value.stax) {
-      case 'California': {
-        stateTax = 13;
-        break;
-      }
-      case 'NY': {
-        stateTax = 12;
-        break;
-      }
-      case 'Florida': {
-        stateTax = 0;
-        break;
-      }
-      default: {
-        stateTax = 0;
-        break;
-      }
-    }
-
-    let federalTax = 0;
-    switch (true) {
-      case salary < 9700: {
-        federalTax = 10;
-        break;
-      }
-      case salary < 39475: {
-        federalTax = 12;
-        break;
-      }
-      case salary < 84200: {
-        federalTax = 22;
-        break;
-      }
-      case salary > 84200: {
-        federalTax = 24;
-        break;
-      }
-    }
+    let stateTax = this.employeeService.getStateTaxPercentage(form.value.stax);
+    let federalTax = this.employeeService.getFederalTaxPercentage(salary);
 
     let takeHome =
       salary -
@@ -120,6 +86,6 @@ export class EmployeeCreateComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/list']);
   }
 }

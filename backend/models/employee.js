@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const employeeSchema = mongoose.Schema({
     fname: {type: String, required: true},
     lname: {type: String, required: true},
-    dob: {type: Date, required:true},
+    dob: {type: Date},
     address:{
         street: String,
         apt: String,

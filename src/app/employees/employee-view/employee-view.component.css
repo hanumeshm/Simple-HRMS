@@ -17,3 +17,13 @@ div {
   padding: 5px;
   display: block;
 }
+
+td,
+tr {
+  padding: 2%;
+  vertical-align: middle;
+}
+
+table {
+  width: auto;
+}

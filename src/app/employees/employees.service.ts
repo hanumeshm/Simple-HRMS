@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth/auth.service';
 
 const BACKEND_URL = environment.apiUrl + '/employees/';
 
@@ -13,7 +14,11 @@ export class EmployeesService {
   private employees: Employee[] = [];
   private employeeUpdated = new Subject<Employee[]>();
 
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   getEmployees() {
     this.httpClient
@@ -40,10 +45,14 @@ export class EmployeesService {
           });
         })
       )
-      .subscribe(transformedData => {
-        this.employees = transformedData;
-        this.employeeUpdated.next([...this.employees]);
-      });
+      .subscribe(
+        transformedData => {
+          this.employees = transformedData;
+          this.employeeUpdated.next([...this.employees]);
+        },
+        //if response is error
+        () => this.authService.logout()
+      );
   }
 
   getEmployeeUpdateListner() {
@@ -64,7 +73,7 @@ export class EmployeesService {
         employee.id = id;
         this.employees.push(employee);
         this.employeeUpdated.next([...this.employees]);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/list']);
       });
   }
 
@@ -73,7 +82,7 @@ export class EmployeesService {
       .put<{ message: string }>(BACKEND_URL + id, employee)
       .subscribe(responseData => {
         console.log(responseData);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/list']);
       });
   }
 
@@ -86,5 +95,40 @@ export class EmployeesService {
       this.employees = updatedEmployeeList;
       this.employeeUpdated.next([...this.employees]);
     });
+  }
+
+  getFederalTaxPercentage(salary: number) {
+    console.log(salary);
+    switch (true) {
+      case salary < 9700: {
+        return 10;
+      }
+      case salary < 39475: {
+        return 12;
+      }
+      case salary < 84200: {
+        return 22;
+      }
+      case salary > 84200: {
+        return 24;
+      }
+    }
+  }
+
+  getStateTaxPercentage(state: string) {
+    switch (state) {
+      case 'California': {
+        return 13;
+      }
+      case 'New York': {
+        return 12;
+      }
+      case 'Florida': {
+        return 0;
+      }
+      default: {
+        return 0;
+      }
+    }
   }
 }

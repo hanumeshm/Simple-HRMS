@@ -1,8 +1,9 @@
-div {
+.outer-div {
   display: block;
   width: 90%;
   margin: auto;
   margin-top: 1rem;
+  max-width: 90%;
 }
 table {
   margin-top: 1rem;
@@ -20,5 +21,9 @@ table {
 }
 
 .w-150 {
-  width: 222px;
+  max-width: 222px;
+}
+
+button {
+  margin: 1rem;
 }

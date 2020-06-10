@@ -1,16 +1,15 @@
-mat-card {
+/* mat-card {
   margin: auto;
   margin-top: 1rem;
-  width: 80%;
+  width: 85%;
 }
 
-.inner-card {
-  width: 100%;
+mat-card-title {
+  margin: auto;
+  margin-top: 1rem;
 }
 
 .example-form {
-  min-width: 150px;
-  max-width: 500px;
   width: 100%;
 }
 
@@ -21,8 +20,36 @@ mat-card {
 button {
   margin-top: 1rem;
   margin-left: 2%;
-}
+  margin-bottom: 1rem;
+} */
 
 mat-spinner {
   margin: auto;
+}
+
+/* .cardList {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+} */
+
+div {
+  margin: auto;
+  width: fit-content;
+  margin-top: 2rem;
+  max-width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.inner-div {
+  margin: initial;
+}
+
+button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }

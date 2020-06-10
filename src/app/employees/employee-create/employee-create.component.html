@@ -1,8 +1,10 @@
 <app-header></app-header>
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Employee Information</mat-card-title>
-  </mat-card-header>
+<!-- <div class="cardList">
+  <div class="cardListItem">
+    <mat-card-header>
+      <mat-card-title>Employee Information</mat-card-title>
+    </mat-card-header>
+  </div>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form
     class="example-form"
@@ -10,8 +12,8 @@
     #employeeForm="ngForm"
     *ngIf="!isLoading"
   >
-    <div>
-      <mat-card class="inner-card">
+    <div class="cardListItem">
+      <mat-card>
         <p mat-tab-link>Basic Details</p>
         <mat-divider></mat-divider>
         <mat-form-field class="full-width">
@@ -37,8 +39,13 @@
             required
             [ngModel]="employee?.lname"
             name="lastName"
+            #lastName="ngModel"
           />
+          <mat-error *ngIf="lastName.invalid"
+            >Please enter employee last name</mat-error
+          >
         </mat-form-field>
+
         <mat-form-field>
           <mat-label>Date Of Birth</mat-label>
           <input
@@ -46,6 +53,7 @@
             [matDatepicker]="picker"
             name="dateOfBirth"
             [ngModel]="employee?.dob"
+            [max]="maxDate"
           />
           <mat-datepicker-toggle
             matSuffix
@@ -55,8 +63,8 @@
         </mat-form-field>
       </mat-card>
     </div>
-    <div>
-      <mat-card class="inner-card">
+    <div class="cardListItem">
+      <mat-card>
         <p mat-tab-link>Address</p>
         <mat-divider></mat-divider>
         <mat-form-field class="full-width">
@@ -105,8 +113,8 @@
         </mat-form-field>
       </mat-card>
     </div>
-    <div>
-      <mat-card class="inner-card">
+    <div class="cardListItem">
+      <mat-card>
         <p mat-tab-link>Salary</p>
         <mat-divider></mat-divider>
         <mat-form-field class="full-width">
@@ -137,7 +145,7 @@
             <mat-option value="NY">New York</mat-option>
           </mat-select>
         </mat-form-field>
-        <a mat-raised-button (click)="calculate(employeeForm)"
+        <a mat-button (click)="calculate(employeeForm)"
           >Calculate Take Home Salary</a
         >
         <span *ngIf="totalTakeHome != 0">
@@ -146,11 +154,192 @@
         </span>
       </mat-card>
     </div>
-    <button mat-raised-button color="primary" (click)="cancel()">
+    <button mat-button color="primary" (click)="cancel()">
       Cancel
     </button>
-    <button mat-raised-button color="primary" type="submit">
+    <button
+      mat-button
+      color="primary"
+      type="submit"
+      [disabled]="employeeForm.invalid"
+    >
       Save
     </button>
   </form>
-</mat-card>
+</div> -->
+<div>
+  <form (ngSubmit)="onSaveEmployee(employeeForm)" #employeeForm="ngForm">
+    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+      <mat-spinner *ngIf="isLoading"></mat-spinner>
+      <mat-step>
+        <ng-template matStepLabel>Basic Details</ng-template>
+        <mat-form-field class="full-width">
+          <mat-label>First Name</mat-label>
+          <input
+            matInput
+            placeholder="Ex. John"
+            required
+            name="firstName"
+            [ngModel]="employee?.fname"
+            minlength="1"
+            #firstName="ngModel"
+          />
+          <mat-error *ngIf="firstName.invalid"
+            >Please enter employee first name</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Last Name</mat-label>
+          <input
+            matInput
+            placeholder="Ex. Doe"
+            required
+            [ngModel]="employee?.lname"
+            name="lastName"
+            #lastName="ngModel"
+          />
+          <mat-error *ngIf="lastName.invalid"
+            >Please enter employee last name</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Date Of Birth</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            name="dateOfBirth"
+            [ngModel]="employee?.dob"
+            [max]="maxDate"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div class="inner-div">
+          <button mat-button (click)="cancel()">
+            Cancel
+          </button>
+          <button type="button" mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Address Information</ng-template>
+        <mat-form-field class="full-width">
+          <mat-label>Street Number and Name</mat-label>
+          <input
+            matInput
+            placeholder="Ex. 1 Washington Square"
+            name="street"
+            [ngModel]="employee?.address.street"
+          />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Apt/Door/Floor Number</mat-label>
+          <input
+            matInput
+            placeholder="Ex. 5612"
+            name="apt"
+            [ngModel]="employee?.address.apt"
+          />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>City</mat-label>
+          <input
+            matInput
+            placeholder="Ex. San Francisco"
+            name="city"
+            [ngModel]="employee?.address.city"
+          />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>State</mat-label>
+          <input
+            matInput
+            placeholder="Ex. California"
+            name="state"
+            [ngModel]="employee?.address.state"
+          />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Country</mat-label>
+          <mat-select name="country" [ngModel]="employee?.address.country">
+            <mat-option value="United States of America"
+              >United States of America</mat-option
+            >
+            <mat-option value="Canada">Canada</mat-option>
+            <mat-option value="Mexico">Mexico</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="inner-div">
+          <button mat-button (click)="cancel()">
+            Cancel
+          </button>
+          <button type="button" mat-button matStepperPrevious>Back</button>
+          <button type="button" mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Salary Information</ng-template>
+        <mat-form-field class="full-width">
+          <mat-label>Annual Pay Rate</mat-label>
+          <input
+            type="number"
+            matInput
+            placeholder="Ex. 5000"
+            name="salary"
+            [ngModel]="employee?.salary"
+            min="0"
+            onkeypress="return event.charCode != 45"
+          />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Deductions</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ex. 300"
+            name="deduction"
+            [ngModel]="employee?.deduction"
+            min="0"
+            onkeypress="return event.charCode != 45"
+          />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>State Tax</mat-label>
+          <mat-select name="stax" [ngModel]="employee?.stax">
+            <mat-option value="California">California</mat-option>
+            <mat-option value="Florida">Florida</mat-option>
+            <mat-option value="NY">New York</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span class="full-width">
+          <button type="button" mat-button (click)="calculate(employeeForm)">
+            Calculate Take Home Salary
+          </button>
+        </span>
+        <span *ngIf="totalTakeHome != 0">
+          <mat-label style="margin-left: 5%">Take Home Pay</mat-label>:
+          {{ totalTakeHome }}
+        </span>
+        <div class="inner-div">
+          <button mat-button (click)="cancel()">
+            Cancel
+          </button>
+          <button
+            type="button"
+            mat-button
+            matStepperPrevious
+            color="primary"
+            type="submit"
+            [disabled]="employeeForm.invalid"
+          >
+            Save
+          </button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </form>
+</div>

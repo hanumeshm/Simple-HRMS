@@ -11,18 +11,20 @@ import { Subscription } from 'rxjs';
 import { ExcelService } from '../excel.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { EmployeeViewComponent } from '../employee-view/employee-view.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.css']
 })
-export class EmployeeListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EmployeeListComponent implements OnInit, OnDestroy {
   employees: Employee[] = [];
   private employeeSubscription: Subscription;
   isLoading = false;
   dataSource;
+  dataSourceExcel;
+
   displayedColumns: string[] = [
     'fname',
     'lname',
@@ -33,6 +35,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     public employeesService: EmployeesService,
@@ -47,12 +50,11 @@ export class EmployeeListComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((employees: Employee[]) => {
         this.employees = employees;
         this.isLoading = false;
-        this.dataSource = this.employees;
+        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.dataSourceExcel = [...this.employees];
       });
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
   }
 
   onDelete(employeeId: string) {
@@ -64,6 +66,15 @@ export class EmployeeListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   exportAsXLSX(): void {
-    this.excelService.exportAsExcelFile(this.dataSource, 'employee');
+    this.dataSourceExcel.forEach(function(value) {
+      delete value['address'];
+      delete value['stax'];
+    });
+    this.excelService.exportAsExcelFile(this.dataSourceExcel, 'employee');
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

@@ -1,9 +1,18 @@
 <mat-toolbar color="primary">
-  <span><a routerLink="/home">Simple-HRMS</a></span>
+  <span
+    ><a routerLink="/list"
+      ><img
+        src="https://www.polymer-project.org/images/logos/p-logo.svg"
+        width="50px"
+      />Simple-HRMS</a
+    ></span
+  >
   <span class="spacer"></span>
   <ul>
     <li>
-      <a mat-button routerLink="/home" routerLinkActive="mat-accent">Home</a>
+      <button mat-button routerLink="/list">
+        <mat-icon>home</mat-icon>
+      </button>
       <a mat-button routerLinkActive="mat-accent" (click)="logout()">Logout</a>
     </li>
   </ul>

@@ -4,6 +4,7 @@ import { AuthData } from './auth-data.model';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
 const BACKEND_URL = environment.apiUrl + '/user/';
 
@@ -18,10 +19,8 @@ export class AuthService {
     this.http
       .post<{ message: string; token: string }>(BACKEND_URL + 'login', authData)
       .subscribe(response => {
-        if (response.message != 'Auth failed') {
-          localStorage.setItem('simpleHRMS', response.token);
-          this.router.navigate(['/home']);
-        }
+        localStorage.setItem('simpleHRMS', response.token);
+        this.router.navigate(['/employee/list']);
       });
   }
 

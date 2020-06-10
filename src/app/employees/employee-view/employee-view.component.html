@@ -5,40 +5,102 @@
   <hr />
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <div *ngIf="employee">
-    <div>
-      <mat-label><b>First Name: </b></mat-label> {{ employee.fname }}
+    <table>
+      <tr>
+        <td>
+          First Name:
+        </td>
+        <td>{{ employee.fname }}</td>
+      </tr>
+
+      <tr>
+        <td>
+          Last Name:
+        </td>
+        <td>{{ employee.lname }}</td>
+      </tr>
+
+      <tr>
+        <td>
+          Date Of Birth:
+        </td>
+
+        <td>
+          {{ employee.dob | date: "MM-dd-yyyy" }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Street Address:
+        </td>
+        <td>
+          {{ employee.address.street }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Apt/Door/Suite:
+        </td>
+        <td>
+          {{ employee.address.apt }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          City:
+        </td>
+        <td>
+          {{ employee.address.city }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          State:
+        </td>
+        <td>
+          {{ employee.address.state }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Country:
+        </td>
+        <td>
+          {{ employee.address.country }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Annual Pay:
+        </td>
+        <td>{{ employee.salary }}</td>
+      </tr>
+      <tr>
+        <td>
+          Pre Tax Deduction:
+        </td>
+        <td>{{ employee.deduction }}</td>
+      </tr>
+      <tr>
+        <td>
+          Take Home Pay:
+        </td>
+        <td>{{ totalTakeHome }}</td>
+      </tr>
+    </table>
+
+    <div class="google-chart">
+      <google-chart
+        #chart
+        [title]="title"
+        [type]="type"
+        [data]="data"
+        [options]="options"
+        [width]="width"
+        [height]="height"
+      >
+      </google-chart>
     </div>
-    <div>
-      <label><b>Last Name: </b></label> {{ employee.lname }}
-    </div>
-    <div>
-      <label><b>Date Of Birth: </b></label>
-      {{ employee.dob | date: "MM-dd-yyyy" }}
-    </div>
-    <div>
-      <label><b>Address: </b></label> {{ employee.address.street }},
-      {{ employee.address.apt }}, {{ employee.address.city }},
-      {{ employee.address.state }}, {{ employee.address.country }}
-    </div>
-    <div>
-      <label><b>Annual Pay: </b></label> {{ employee.salary }}
-    </div>
-    <div>
-      <label><b>Pre Tax Deduction: </b></label> {{ employee.deduction }}
-    </div>
-    <div>
-      <label><b>Take Home Pay: </b></label> {{ totalTakeHome }}
-    </div>
-    <google-chart
-      #chart
-      [title]="title"
-      [type]="type"
-      [data]="data"
-      [options]="options"
-      [width]="width"
-      [height]="height"
-    >
-    </google-chart>
   </div>
   <button mat-raised-button color="primary" (click)="action('list')">
     Back to List
