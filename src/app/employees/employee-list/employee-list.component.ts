@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  ViewChild
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { EmployeesService } from '../employees.service';
 import { Employee } from '../employee.model';
 import { Subscription } from 'rxjs';

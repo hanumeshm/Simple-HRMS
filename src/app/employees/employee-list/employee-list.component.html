@@ -5,7 +5,7 @@
   <a
     mat-raised-button
     color="accent"
-    routerLink="/create"
+    routerLink="/employee/create"
     routerLinkActive="mat-accent"
     >Add Employee</a
   >
@@ -64,11 +64,17 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef width="222px"></th>
         <td mat-cell *matCellDef="let employee">
-          <a mat-button color="primary" [routerLink]="['/view', employee.id]"
+          <a
+            mat-button
+            color="primary"
+            [routerLink]="['/employee/view', employee.id]"
             >View</a
           >
           |
-          <a mat-button color="primary" [routerLink]="['/edit', employee.id]"
+          <a
+            mat-button
+            color="primary"
+            [routerLink]="['/employee/edit', employee.id]"
             >Edit</a
           >
           |

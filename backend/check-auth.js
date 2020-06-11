@@ -8,7 +8,6 @@ module.exports = (req, res, next) => {
   if(!payload)
     return res.status(401).json({message:'Unauthorized request'})
 
-  //req.email = payload.subject
   next()
   }
   catch{

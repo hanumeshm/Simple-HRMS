@@ -4,9 +4,8 @@ import { AuthData } from './auth-data.model';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
 
-const BACKEND_URL = environment.apiUrl + '/user/';
+const BACKEND_URL = environment.apiUrl + '/auth/';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +33,6 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('simpleHRMS');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

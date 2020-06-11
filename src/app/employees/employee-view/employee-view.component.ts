@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from '../employee.model';
-import { NgForm } from '@angular/forms';
 import { EmployeesService } from '../employees.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { State } from 'src/app/store/state.enum';
 
 @Component({
   selector: 'app-employee-view',
@@ -15,8 +13,8 @@ export class EmployeeViewComponent implements OnInit {
   employee: Employee;
   isLoading = false;
   totalTakeHome = 0;
-  federalTax = 0;
-  stateTax = 0;
+  federalTaxAmount = 0;
+  stateTaxAmount = 0;
   title = 'Earnings/Deductions/Taxes';
   type = 'PieChart';
   data = null;
@@ -47,28 +45,30 @@ export class EmployeeViewComponent implements OnInit {
           this.data = [
             ['Take Home', this.totalTakeHome],
             ['Pre Tax Deduction', this.employee.deduction],
-            ['State Tax', this.stateTax],
-            ['Federal Tax', this.federalTax]
+            ['State Tax', this.stateTaxAmount],
+            ['Federal Tax', this.federalTaxAmount]
           ];
         });
     });
   }
 
   calculate(salary: number, deduction: number, stax: string) {
-    let stateTaxPercentage = State[stax];
-    this.stateTax = (salary - deduction) * (stateTaxPercentage / 100);
+    let stateTaxPercentage = this.employeeService.getStateTextPercentage(stax);
+    this.stateTaxAmount = (salary - deduction) * (stateTaxPercentage / 100);
 
-    let federTaxPercentage = this.employeeService.getFederalTaxPercentage(
-      salary
+    let fedTaxPercentage = this.employeeService.getFederalTaxPercentage(salary);
+    this.federalTaxAmount = (salary - deduction) * (fedTaxPercentage / 100);
+
+    this.totalTakeHome = this.employeeService.getTakeHomeSalary(
+      salary,
+      deduction,
+      fedTaxPercentage,
+      stateTaxPercentage
     );
-    this.federalTax = (salary - deduction) * (federTaxPercentage / 100);
-
-    let takeHome = salary - deduction - (this.federalTax + this.stateTax);
-    this.totalTakeHome = Math.round((takeHome + Number.EPSILON) * 100) / 100;
   }
 
   action(option: string) {
-    if (option == 'list') this.router.navigate(['/list']);
-    else this.router.navigate(['/edit/' + this.employeeId]);
+    if (option == 'list') this.router.navigate(['/employee/list']);
+    else this.router.navigate(['/employee/edit/' + this.employeeId]);
   }
 }

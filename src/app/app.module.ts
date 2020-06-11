@@ -10,7 +10,6 @@ import { TokenInterceptorService } from './auth/token-interceptor.service';
 import { ExcelService } from './employees/excel.service';
 import { ErrorInterceptor } from './error-interceptor.service';
 import { AngularMaterialModule } from './angular-material.module';
-import { EmployeesModule } from './employees/employees.module';
 import { AuthModule } from './auth/auth-module';
 
 @NgModule({
@@ -22,7 +21,6 @@ import { AuthModule } from './auth/auth-module';
     FlexLayoutModule,
     HttpClientModule,
     AngularMaterialModule,
-    EmployeesModule,
     AuthModule
   ],
   providers: [

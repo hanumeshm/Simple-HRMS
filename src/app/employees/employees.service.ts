@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
+import { State } from '../store/state.enum';
 
 const BACKEND_URL = environment.apiUrl + '/employees/';
 
@@ -68,37 +69,42 @@ export class EmployeesService {
   addEmployee(employee: Employee) {
     this.httpClient
       .post<{ message: string; id: string }>(BACKEND_URL, employee)
-      .subscribe(responseData => {
-        const id = responseData.id;
-        employee.id = id;
-        this.employees.push(employee);
-        this.employeeUpdated.next([...this.employees]);
-        this.router.navigate(['/list']);
-      });
+      .subscribe(
+        () => {
+          this.router.navigate(['/employee/list']);
+        },
+        //if response is error
+        () => this.authService.logout()
+      );
   }
 
   updateEmployee(id: string, employee: Employee) {
     this.httpClient
       .put<{ message: string }>(BACKEND_URL + id, employee)
-      .subscribe(responseData => {
-        console.log(responseData);
-        this.router.navigate(['/list']);
-      });
+      .subscribe(
+        () => {
+          this.router.navigate(['/employee/list']);
+        },
+        //if response is error
+        () => this.authService.logout()
+      );
   }
 
   deleteEmployee(employeeId: string) {
-    this.httpClient.delete(BACKEND_URL + employeeId).subscribe(responseData => {
-      console.log(responseData);
-      const updatedEmployeeList = this.employees.filter(
-        employee => employee.id != employeeId
-      );
-      this.employees = updatedEmployeeList;
-      this.employeeUpdated.next([...this.employees]);
-    });
+    this.httpClient.delete(BACKEND_URL + employeeId).subscribe(
+      () => {
+        const updatedEmployeeList = this.employees.filter(
+          employee => employee.id != employeeId
+        );
+        this.employees = updatedEmployeeList;
+        this.employeeUpdated.next([...this.employees]);
+      },
+      //if response is error
+      () => this.authService.logout()
+    );
   }
 
   getFederalTaxPercentage(salary: number) {
-    console.log(salary);
     switch (true) {
       case salary < 9700: {
         return 10;
@@ -115,20 +121,20 @@ export class EmployeesService {
     }
   }
 
-  getStateTaxPercentage(state: string) {
-    switch (state) {
-      case 'California': {
-        return 13;
-      }
-      case 'New York': {
-        return 12;
-      }
-      case 'Florida': {
-        return 0;
-      }
-      default: {
-        return 0;
-      }
-    }
+  getStateTextPercentage(stateName: string) {
+    return State[stateName];
+  }
+
+  getTakeHomeSalary(
+    salary: number,
+    deduction: number,
+    federalTaxPecentage,
+    stateTaxPencentage
+  ) {
+    let takeHome =
+      salary -
+      deduction -
+      ((salary - deduction) * (federalTaxPecentage + stateTaxPencentage)) / 100;
+    return Math.round((takeHome + Number.EPSILON) * 100) / 100;
   }
 }

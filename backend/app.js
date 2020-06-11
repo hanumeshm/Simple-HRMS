@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const employeeRoute = require("./routes/employee")
-const userRoute = require("./routes/user")
+const authRoute = require("./routes/auth")
 
 const app = express();
 
@@ -24,7 +24,7 @@ mongoose.connect("mongodb+srv://dev:"+ process.env.MONGO_ATLAS_PWD +"@cluster0-j
 });
 
 app.use("/api/employees",employeeRoute)
-app.use("/api/user",userRoute)
+app.use("/api/auth",authRoute)
 
 module.exports = app;
 

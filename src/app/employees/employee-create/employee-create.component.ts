@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from '../employee.model';
-import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { EmployeesService } from '../employees.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { State } from 'src/app/store/state.enum';
 
 @Component({
   selector: 'app-employee-create',
@@ -75,17 +74,18 @@ export class EmployeeCreateComponent implements OnInit {
   calculate(form: NgForm) {
     let salary = form.value.salary;
     let deduction = form.value.deduction;
-    let stateTax = this.employeeService.getStateTaxPercentage(form.value.stax);
+    let stateTax = this.employeeService.getStateTextPercentage(form.value.stax);
     let federalTax = this.employeeService.getFederalTaxPercentage(salary);
 
-    let takeHome =
-      salary -
-      deduction -
-      ((salary - deduction) * (federalTax + stateTax)) / 100;
-    this.totalTakeHome = Math.round((takeHome + Number.EPSILON) * 100) / 100;
+    this.totalTakeHome = this.employeeService.getTakeHomeSalary(
+      salary,
+      deduction,
+      federalTax,
+      stateTax
+    );
   }
 
   cancel() {
-    this.router.navigate(['/list']);
+    this.router.navigate(['/employee/list']);
   }
 }

@@ -1,38 +1,6 @@
-/* mat-card {
-  margin: auto;
-  margin-top: 1rem;
-  width: 85%;
-}
-
-mat-card-title {
-  margin: auto;
-  margin-top: 1rem;
-}
-
-.example-form {
-  width: 100%;
-}
-
-.full-width {
-  width: 100%;
-}
-
-button {
-  margin-top: 1rem;
-  margin-left: 2%;
-  margin-bottom: 1rem;
-} */
-
 mat-spinner {
   margin: auto;
 }
-
-/* .cardList {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-} */
 
 div {
   margin: auto;

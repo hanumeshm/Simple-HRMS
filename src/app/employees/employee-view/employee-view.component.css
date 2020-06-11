@@ -24,6 +24,11 @@ tr {
   vertical-align: middle;
 }
 
+td {
+  width: 1px;
+  white-space: nowrap;
+}
+
 table {
   width: auto;
 }

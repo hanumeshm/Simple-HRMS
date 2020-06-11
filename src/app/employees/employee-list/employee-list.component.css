@@ -1,9 +1,9 @@
 .outer-div {
   display: block;
-  width: 90%;
+  width: 95%;
+  max-width: 95%;
   margin: auto;
   margin-top: 1rem;
-  max-width: 90%;
 }
 table {
   margin-top: 1rem;
@@ -16,7 +16,8 @@ mat-spinner {
   margin: auto;
 }
 
-table {
+table,
+mat-paginator {
   width: 100%;
 }
 
@@ -26,4 +27,7 @@ table {
 
 button {
   margin: 1rem;
+}
+.mat-column-select {
+  overflow: initial;
 }
