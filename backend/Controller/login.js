@@ -11,7 +11,7 @@ exports.userLogin =(req,res,next)=>{
     });
   }
     fetechedUser = user;
-    return bcrypt.compare(req.body.password, user.password);
+    return bcrypt.compare(req.body.password, fetechedUser.password);
   }).then(result =>{
   if(!result){
     return res.status(401).json({
